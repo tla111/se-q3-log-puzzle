@@ -13,12 +13,13 @@ Here's what a puzzle URL looks like (spread out onto multiple lines):
 HTTP/1.0" 302 528 "-" "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US;
 rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6"
 """
-
-import os
-import re
-import sys
-import urllib.request
 import argparse
+import urllib.request
+import sys
+import re
+import os
+
+'Timothy La (tla111)'
 
 
 def read_urls(filename):
