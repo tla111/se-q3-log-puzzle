@@ -27,8 +27,13 @@ def read_urls(filename):
     extracting the hostname from the filename itself, sorting
     alphabetically in increasing order, and screening out duplicates.
     """
-    # +++your code here+++
-    pass
+    open_url = urllib.request.urlopen(filename)
+    # Sort
+    # open_url.sort()
+    # Remove Duplicate
+    # not_duplicate = [x for x, y in zip(movies[1:], movies[:-1]) if x == y]
+    # not_duplicate = [x for x in movies if movies.count(x) > 1]
+    print(open_url)
 
 
 def download_images(img_urls, dest_dir):
