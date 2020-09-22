@@ -21,19 +21,34 @@ import os
 
 'Timothy La (tla111)'
 
+# Key to sort urls
+
+
+def sort_url(x):
+    diff_match_url = re.search("-(\w+)-(\w+).\w+", x)
+    if diff_match_url:
+        return diff_match_url.group(2)
+    else:
+        return x
+
 
 def read_urls(filename):
     """Returns a list of the puzzle URLs from the given log file,
     extracting the hostname from the filename itself, sorting
     alphabetically in increasing order, and screening out duplicates.
     """
-    open_url = urllib.request.urlopen(filename)
-    # Sort
-    # open_url.sort()
-    # Remove Duplicate
-    # not_duplicate = [x for x, y in zip(movies[1:], movies[:-1]) if x == y]
-    # not_duplicate = [x for x in movies if movies.count(x) > 1]
-    print(open_url)
+    dash_index = filename.find("_")
+    host_name = filename[dash_index + 1:]
+    with open(filename, 'r') as f:
+        no_duplicates = {}
+        for animal in f:
+            match_url = re.search("GET\s(\S+)", animal)
+            if match_url:
+                match_group = match_url.group(1)
+                if "puzzle" in match_group:
+                    no_duplicates["https://" + host_name + match_group] = 1
+        list_urls = sorted(no_duplicates.keys(), key=sort_url)
+        return list_urls
 
 
 def download_images(img_urls, dest_dir):
