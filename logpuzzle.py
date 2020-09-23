@@ -20,6 +20,7 @@ import re
 import os
 
 'Timothy La (tla111)'
+'Received help from Joseph, John W'
 
 # Key to sort urls
 
@@ -48,7 +49,10 @@ def read_urls(filename):
                 if "puzzle" in match_group:
                     no_duplicates["https://" + host_name + match_group] = 1
         list_urls = sorted(no_duplicates.keys(), key=sort_url)
+        # Get alphatize
         return list_urls
+        # for x in list_urls:
+        #     print(x)
 
 
 def download_images(img_urls, dest_dir):
@@ -59,8 +63,18 @@ def download_images(img_urls, dest_dir):
     to show each local image file.
     Creates the directory if necessary.
     """
-    # +++your code here+++
-    pass
+    result_list = []
+    if not os.path.isdir(dest_dir):
+        os.makedirs(dest_dir)
+    for x, each_url in enumerate(img_urls):
+        file_name = dest_dir + "/img" + str(x) + each_url[-4:]
+        urllib.request.urlretrieve(each_url, file_name)
+        result_list.append("img" + str(x) + each_url[-4:])
+    with open(dest_dir + "/" + "index.html", "w") as index_file:
+        index_file.write(f'<html><body>')
+        for photo in result_list:
+            index_file.write(f'<img src={photo}>')
+        index_file.write(f'</body></html>')
 
 
 def create_parser():
