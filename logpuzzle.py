@@ -13,12 +13,24 @@ Here's what a puzzle URL looks like (spread out onto multiple lines):
 HTTP/1.0" 302 528 "-" "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US;
 rv:1.8.1.6) Gecko/20070725 Firefox/2.0.0.6"
 """
-
-import os
-import re
-import sys
-import urllib.request
 import argparse
+import urllib.request
+import sys
+import re
+import os
+
+'Timothy La (tla111)'
+'Received help from Joseph, John W'
+
+# Key to sort urls
+
+
+def sort_url(x):
+    diff_match_url = re.search("-(\w+)-(\w+)\.\w+", x)
+    if diff_match_url:
+        return diff_match_url.group(2)
+    else:
+        return x
 
 
 def read_urls(filename):
@@ -26,8 +38,21 @@ def read_urls(filename):
     extracting the hostname from the filename itself, sorting
     alphabetically in increasing order, and screening out duplicates.
     """
-    # +++your code here+++
-    pass
+    dash_index = filename.find("_")
+    host_name = filename[dash_index + 1:]
+    with open(filename, 'r') as f:
+        no_duplicates = {}
+        for animal in f:
+            match_url = re.search("GET\s(\S+)", animal)
+            if match_url:
+                match_group = match_url.group(1)
+                if "puzzle" in match_group:
+                    no_duplicates["https://" + host_name + match_group] = 1
+        list_urls = sorted(no_duplicates.keys(), key=sort_url)
+
+        return list_urls
+        # for x in list_urls:
+        #     print(x)
 
 
 def download_images(img_urls, dest_dir):
@@ -38,8 +63,18 @@ def download_images(img_urls, dest_dir):
     to show each local image file.
     Creates the directory if necessary.
     """
-    # +++your code here+++
-    pass
+    result_list = []
+    if not os.path.isdir(dest_dir):
+        os.makedirs(dest_dir)
+    for x, each_url in enumerate(img_urls):
+        file_name = dest_dir + "/img" + str(x) + each_url[-4:]
+        urllib.request.urlretrieve(each_url, file_name)
+        result_list.append("img" + str(x) + each_url[-4:])
+    with open(dest_dir + "/" + "index.html", "w") as index_file:
+        index_file.write(f'<html><body>')
+        for photo in result_list:
+            index_file.write(f'<img src={photo}>')
+        index_file.write(f'</body></html>')
 
 
 def create_parser():
