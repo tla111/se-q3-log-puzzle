@@ -26,7 +26,7 @@ import os
 
 
 def sort_url(x):
-    diff_match_url = re.search("-(\w+)-(\w+).\w+", x)
+    diff_match_url = re.search("-(\w+)-(\w+)\.\w+", x)
     if diff_match_url:
         return diff_match_url.group(2)
     else:
@@ -49,7 +49,7 @@ def read_urls(filename):
                 if "puzzle" in match_group:
                     no_duplicates["https://" + host_name + match_group] = 1
         list_urls = sorted(no_duplicates.keys(), key=sort_url)
-        # Get alphatize
+
         return list_urls
         # for x in list_urls:
         #     print(x)
